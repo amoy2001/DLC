@@ -1,130 +1,30 @@
-import React, { useState } from "react";
-import axios from "axios";
-import './App.css';
+<div class="App">
+  <h1>DLC Tracker</h1>
 
-function App() {
-  const [selectedProcess, setSelectedProcess] = useState(null);
-  const [processTypeOptions, setProcessTypeOptions] = useState([]);
-  const [inputValue, setInputValue] = useState("");
-  const [stage, setStage] = useState("Padding");
-  const [stageTime, setStageTime] = useState(0);
-  const [totalTime, setTotalTime] = useState(0);
-  const [intervalId, setIntervalId] = useState(null);
-  const [processList, setProcessList] = useState([]);
-
-  const processOptions = [
-    "Kuster CPB",
-    "Goller CPB",
-    "Shirting CPB",
-    "Pad Dry",
-    "E-Control"
-  ];
-
-  const stages = {
-    "CPB": ["Padding", "Rota", "Washing", "Drying", "Developed"],
-    "PDPS": ["Padding", "Drying", "Developing", "Drying", "Developed"],
-    "E-Control": ["Padding", "E-Control", "Washing", "Drying", "Developed"],
-    "Thermosol": ["Padding", "Drying", "Heat Set", "Carbonyze", "Drying"],
-    "Vat": ["Padding", "Drying", "Developing", "Drying"],
-    "Single Bath Vat": ["Padding", "Drying", "Heat Set", "Developing", "Drying", "Carbonyze", "Drying", "Developed"],
-    "Perma White": ["Padding", "Rota", "Washing", "Drying", "Developed"]
-  };
-
-  const handleProcessSelection = (process) => {
-    setSelectedProcess(process);
-    if (["Kuster CPB", "Goller CPB", "Shirting CPB"].includes(process)) {
-      setProcessTypeOptions(["CPB", "Perma White"]);
-    } else {
-      setProcessTypeOptions(["PDPS", "E-Control", "Thermosol", "Vat", "Single Bath Vat"]);
-    }
-  };
-
-  const startTimer = () => {
-    const interval = setInterval(() => {
-      setStageTime((prev) => prev + 1);
-      setTotalTime((prev) => prev + 1);
-    }, 1000);
-    setIntervalId(interval);
-  };
-
-  const moveToNextStage = () => {
-    clearInterval(intervalId);
-    const processStages = stages[processTypeOptions[0]];
-    const currentStageIndex = processStages.indexOf(stage);
-    if (currentStageIndex < processStages.length - 1) {
-      setStage(processStages[currentStageIndex + 1]);
-      setStageTime(0);
-      startTimer();
-    } else {
-      clearInterval(intervalId);
-    }
-  };
-
-  const addProcessEntry = () => {
-    const newProcess = {
-      processType: selectedProcess,
-      inputValue: inputValue,
-      currentStage: stage,
-      totalTime: totalTime
-    };
-    setProcessList([...processList, newProcess]);
-    axios.post("/api/addProcess", newProcess);
-  };
-
-  return (
-    <div className="App">
-      <h1>Process Tracker</h1>
-
-      <div className="process-selection">
-        <h2>Select Process</h2>
-        {processOptions.map((process) => (
-          <button key={process} onClick={() => handleProcessSelection(process)}>
-            {process}
-          </button>
-        ))}
+  <div class="entry-section">
+    <div class="vertical-layout">
+      <div>
+        <h2>Machine</h2>
+        <div id="machineSelectionContainer"></div>
       </div>
 
-      {selectedProcess && (
-        <div className="process-form">
-          <h3>Process: {selectedProcess}</h3>
-          <label>Enter Number/Alphabet</label>
-          <input
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            type="text"
-          />
-
-          <label>Select Process Type</label>
-          <select onChange={(e) => setStage(e.target.value)}>
-            {processTypeOptions.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-
-          <button onClick={startTimer}>Start Process</button>
-          <button onClick={addProcessEntry}>Add Process</button>
-
-          <div>
-            <h3>Current Stage: {stage}</h3>
-            <p>Stage Time: {stageTime}s</p>
-            <p>Total Time: {totalTime}s</p>
-            <button onClick={moveToNextStage}>Next Stage</button>
-          </div>
-        </div>
-      )}
-
-      <h2>Current Processes</h2>
-      <ul>
-        {processList.map((process, index) => (
-          <li key={index}>
-            {process.processType} - {process.inputValue} - {process.currentStage} - Total Time: {process.totalTime}s
-          </li>
-        ))}
-      </ul>
+    <div class="tank-input-section">
+      <h2>Tank No.</h2>
+      <input id="inputValue" type="text" />
     </div>
-  );
-}
 
-export default App;
+    <div>
+        <h2>Route</h2>
+        <div id="routeSelectionContainer"></div>
+      </div>
+    </div>
+
+    <button id="addProcessBtn">Add Process</button>
+  </div>
+
+  <h2>Ongoing Processes</h2>
+  <div id="processListContainer"></div>
+
+  <h2>Developed Processes</h2>
+  <div id="developedListContainer"></div>
+</div>
