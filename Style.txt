@@ -1,16 +1,24 @@
 .App {
   font-family: Arial, sans-serif;
-  text-align: center;
 }
 
-.process-selection button {
-  margin: 10px;
-  padding: 10px;
-  font-size: 16px;
+.entry-section {
+  padding: 20px;
 }
 
-.process-form {
+.horizontal-layout {
+  display: flex;
+  gap: 50px;
+}
+
+.tank-input-section {
   margin-top: 20px;
+  width: 330px;
+}
+
+#inputValue {
+  width: 100%;
+  padding: 8px;
 }
 
 button {
@@ -20,28 +28,42 @@ button {
   border: none;
   cursor: pointer;
   font-size: 14px;
+  margin-top: 10px;
 }
 
 button:hover {
   background-color: #45a049;
 }
 
-select, input {
-  margin-top: 10px;
-  padding: 8px;
-  font-size: 16px;
+#machineSelectionContainer div,
+#routeSelectionContainer div {
+  padding: 10px;
+  margin: 5px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
-h2 {
+.selected-machine {
+  background-color: #ffcc00;
+}
+
+.process-list-item,
+.developed-list-item {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f5f5f5;
+}
+
+.process-info {
+  display: flex;
+  justify-content: space-between;
+}
+
+#processListContainer, #developedListContainer {
   margin-top: 20px;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  margin-top: 10px;
-  font-size: 18px;
 }
