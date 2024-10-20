@@ -1,0 +1,36 @@
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+mongoose.connect('mongodb://localhost:27017/processTracker', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const ProcessSchema = new mongoose.Schema({
+  processType: String,
+  inputValue: String,
+  currentStage: String,
+  totalTime: Number,
+});
+
+const Process = mongoose.model('Process', ProcessSchema);
+
+app.post('/api/addProcess', async (req, res) => {
+  const newProcess = new Process(req.body);
+  await newProcess.save();
+  res.status(200).send('Process added');
+});
+
+app.get('/api/processes', async (req, res) => {
+  const processes = await Process.find();
+  res.json(processes);
+});
+
+app.listen(5000, () => {
+  console.log('Server running on port 5000');
+});
